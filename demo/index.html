@@ -115,6 +115,24 @@
       color: #FFFFFF;
       background-color: #007AFF;
     }
+
+    #mention-list {
+      display: none;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      background-color: #DDDDDD;
+    }
+
+    #mention-list ul {
+      list-style: none;
+      padding-left: 15px;
+    }
+
+    .mention-person {
+      padding: 5px 0;
+    }
+
   </style>
   <script>
     window.onerror = function(a,b,c) {
@@ -164,6 +182,14 @@
   <div class="message left"><span>Right on! Let's party 🎉 🎉</span>
     <div>10/20/16, 4:23 PM</div>
   </div>
+</div>
+
+<div id="mention-list">
+  <ul>
+    <li class="mention-person"><a onclick="tapMention('John')">🧔🏻  John</a></li>
+    <li class="mention-person"><a onclick="tapMention('Jack')">👨🏽‍🦱 Jack</a></li>
+    <li class="mention-person"><a onclick="tapMention('Jill')">👱🏻‍♀️ Jill</a></li>
+  </ul>
 </div>
 
 <script type="text/javascript" src="cordova.js"></script>
@@ -216,6 +242,12 @@
       onTextChanged: function(newText) {
         console.log("text changed to: " + newText);
         //appendMessage(newText);
+        
+        // check for mention
+        if (newText.match(/@/)) {
+          console.log('found @ mention');
+          showMentionList();
+        }        
       },
       showKeyboard: true,
       type: "twitter", // iOS only, default (default) | decimalpad | phonepad | numberpad | namephonepad | number | email | twitter | url | alphabet | search | ascii
@@ -295,6 +327,18 @@
 
   if (chatShowing) {
     document.addEventListener('deviceready', showMessenger, false);
+  }
+
+  function showMentionList() {
+    var mentionList = document.getElementById('mention-list');
+    mentionList.style.display = 'block';
+  }
+
+  var mentionCount = 0;
+
+  function tapMention(name) {
+    mentionCount++;
+    console.log("Tapped mention", name, mentionCount);
   }
 
   //setTimeout(function() {
